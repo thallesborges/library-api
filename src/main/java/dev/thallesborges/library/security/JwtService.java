@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
 public class JwtService {
     // openssl rand -base64 32
     private static final String SECRET = "azKTNw4n/IhKLahXEhhRMyQI5Qn387RhfZyt5ra0iW0=";
-    private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    private final SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET));
 
     public String generateToken(UserEntity user) {
         long now = System.currentTimeMillis();
