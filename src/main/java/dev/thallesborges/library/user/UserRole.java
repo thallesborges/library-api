@@ -1,6 +1,6 @@
-package dev.thallesborges.library.enums;
+package dev.thallesborges.library.user;
 
-public enum Role {
+public enum UserRole {
     USER,
     ADMIN
 }
