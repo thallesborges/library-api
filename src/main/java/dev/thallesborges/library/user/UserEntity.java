@@ -1,6 +1,5 @@
-package dev.thallesborges.library.database.entity;
+package dev.thallesborges.library.user;
 
-import dev.thallesborges.library.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +26,5 @@ public class UserEntity {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private UserRole role = UserRole.USER;
 }
