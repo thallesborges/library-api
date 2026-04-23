@@ -2,8 +2,8 @@ package dev.thallesborges.library.service;
 
 import dev.thallesborges.library.database.entity.UserEntity;
 import dev.thallesborges.library.database.repository.UserRepository;
-import dev.thallesborges.library.dto.LoginUserRequest;
-import dev.thallesborges.library.dto.RegisterUserRequest;
+import dev.thallesborges.library.auth.LoginRequest;
+import dev.thallesborges.library.auth.RegisterRequest;
 import dev.thallesborges.library.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,16 +15,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserResponse registerUser(RegisterUserRequest registerUserRequest) {
-        if (userRepository.existsByEmail(registerUserRequest.email())) {
+    public UserResponse registerUser(RegisterRequest registerRequest) {
+        if (userRepository.existsByEmail(registerRequest.email())) {
             throw new RuntimeException("Email already exists");
         }
 
-        String passwordHash = passwordEncoder.encode(registerUserRequest.password());
+        String passwordHash = passwordEncoder.encode(registerRequest.password());
 
         UserEntity newUser = UserEntity.builder()
-                .name(registerUserRequest.name())
-                .email(registerUserRequest.email())
+                .name(registerRequest.name())
+                .email(registerRequest.email())
                 .password(passwordHash)
                 .build();
 
@@ -37,11 +37,11 @@ public class UserService {
         );
     }
 
-    public void loginUser(LoginUserRequest loginUserRequest) {
-        UserEntity user = userRepository.findByEmail(loginUserRequest.email())
+    public void loginUser(LoginRequest loginRequest) {
+        UserEntity user = userRepository.findByEmail(loginRequest.email())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!passwordEncoder.matches(loginUserRequest.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             throw new RuntimeException("Wrong password");
         }
     }
