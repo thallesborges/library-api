@@ -1,4 +1,4 @@
-package dev.thallesborges.library.dto;
+package dev.thallesborges.library.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
