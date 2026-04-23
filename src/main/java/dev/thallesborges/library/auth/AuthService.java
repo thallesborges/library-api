@@ -1,5 +1,8 @@
 package dev.thallesborges.library.auth;
 
+import dev.thallesborges.library.exception.EmailAlreadyExistsException;
+import dev.thallesborges.library.exception.UserNotFoundException;
+import dev.thallesborges.library.exception.WrongPasswordException;
 import dev.thallesborges.library.user.UserEntity;
 import dev.thallesborges.library.user.UserRepository;
 import dev.thallesborges.library.security.JwtService;
@@ -16,7 +19,7 @@ public class AuthService {
 
     public void register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         UserEntity user = UserEntity.builder()
@@ -30,10 +33,10 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
         UserEntity user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if  (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new IllegalArgumentException("Wrong password");
+            throw new WrongPasswordException("Wrong password");
         }
 
         String token = jwtService.generateToken(user);
