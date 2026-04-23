@@ -1,7 +1,5 @@
-package dev.thallesborges.library.database.repository;
+package dev.thallesborges.library.user;
 
-import dev.thallesborges.library.database.entity.UserEntity;
-import jakarta.validation.constraints.Email;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
