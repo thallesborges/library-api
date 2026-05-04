@@ -1,0 +1,9 @@
+spring:
+  docker:
+    compose:
+      enabled: false
+  flyway:
+    enabled: true
+
+jwt:
+  secret: xNg0H7GSToK4+oePA+IIp4IQeFDdaDDWCAqeL86gwsU=
