@@ -4,6 +4,8 @@ import dev.thallesborges.library.user.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -13,9 +15,14 @@ import java.util.Date;
 
 @Service
 public class JwtService {
+    private final SecretKey key;
+
     // openssl rand -base64 32
-    private static final String SECRET = "azKTNw4n/IhKLahXEhhRMyQI5Qn387RhfZyt5ra0iW0=";
-    private final SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET));
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(
+                Base64.getDecoder().decode(secret)
+        );
+    }
 
     public String generateToken(UserEntity user) {
         long now = System.currentTimeMillis();
