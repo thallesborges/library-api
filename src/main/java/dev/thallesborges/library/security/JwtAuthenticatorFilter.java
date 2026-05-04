@@ -35,12 +35,11 @@ public class JwtAuthenticatorFilter extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
 
-        if (authorizationHeader != null && !authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        assert authorizationHeader != null;
         String token = authorizationHeader.substring(7);
 
         String email = jwtService.extractEmail(token);

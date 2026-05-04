@@ -2,11 +2,13 @@ package dev.thallesborges.library.admin;
 
 import dev.thallesborges.library.auth.RegisterRequest;
 import dev.thallesborges.library.exception.EmailAlreadyExistsException;
+import dev.thallesborges.library.exception.UserNotFoundException;
 import dev.thallesborges.library.user.UserEntity;
 import dev.thallesborges.library.user.UserRepository;
 import dev.thallesborges.library.user.UserResponse;
 import dev.thallesborges.library.user.UserRole;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +49,20 @@ public class AdminService {
                 userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getRole()
+        );
+    }
+
+    public UserResponse delete(Long id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        userRepository.deleteById(id);
+
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole()
         );
     }
 }

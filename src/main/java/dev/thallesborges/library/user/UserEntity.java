@@ -24,7 +24,6 @@ public class UserEntity {
 
     private String password;
 
-    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private UserRole role = UserRole.USER;
+    private UserRole role;
 }
