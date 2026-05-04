@@ -6,6 +6,8 @@ import dev.thallesborges.library.exception.WrongPasswordException;
 import dev.thallesborges.library.user.UserEntity;
 import dev.thallesborges.library.user.UserRepository;
 import dev.thallesborges.library.security.JwtService;
+import dev.thallesborges.library.user.UserResponse;
+import dev.thallesborges.library.user.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,18 +19,26 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public void register(RegisterRequest request) {
+    public UserResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new EmailAlreadyExistsException("Email already exists");
         }
 
-        UserEntity user = UserEntity.builder()
+        UserEntity userEntity = UserEntity.builder()
                 .name(request.name())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
+                .role(UserRole.USER)
                 .build();
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
+
+        return new UserResponse(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getEmail(),
+                userEntity.getRole()
+        );
     }
 
     public LoginResponse login(LoginRequest request) {
